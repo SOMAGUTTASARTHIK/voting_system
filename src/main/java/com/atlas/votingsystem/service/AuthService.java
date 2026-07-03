@@ -11,24 +11,24 @@ public class AuthService {
 
     private static final String ADMIN_ROLE = "ADMIN";
 
-    private final String username;
+    private final String email;
     private final String password;
     private final String role;
 
-    public AuthService(@Value("${app.auth.username}") String username,
+    public AuthService(@Value("${app.auth.email}") String email,
                        @Value("${app.auth.password}") String password,
                        @Value("${app.auth.role}") String role) {
-        this.username = username;
+        this.email = email;
         this.password = password;
         this.role = role;
     }
 
     public LoginResponse login(LoginRequest request) {
         if (!ADMIN_ROLE.equalsIgnoreCase(role)
-                || !username.equals(request.getUsername())
+                || !email.equalsIgnoreCase(request.getEmail())
                 || !password.equals(request.getPassword())) {
-            throw new InvalidCredentialsException("Invalid username or password");
+            throw new InvalidCredentialsException("Invalid email or password");
         }
-        return new LoginResponse(username, ADMIN_ROLE, "Admin login successful");
+        return new LoginResponse(email, ADMIN_ROLE, "Admin login successful");
     }
 }
