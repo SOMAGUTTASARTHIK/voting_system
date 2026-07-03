@@ -16,6 +16,10 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     List<Candidate> findByConstituencyIgnoreCaseOrderByVoteCountDesc(String constituency);
 
+    boolean existsByPartyNameIgnoreCase(String partyName);
+
+    boolean existsByPartyNameIgnoreCaseAndIdNot(String partyName, Long id);
+
     @Modifying
     @Query("update Candidate c set c.voteCount = c.voteCount + 1 where c.id = :id")
     int incrementVoteCount(@Param("id") Long id);

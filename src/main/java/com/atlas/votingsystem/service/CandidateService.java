@@ -3,6 +3,7 @@ package com.atlas.votingsystem.service;
 import com.atlas.votingsystem.dto.CandidateRequest;
 import com.atlas.votingsystem.dto.CandidateResponse;
 import com.atlas.votingsystem.entity.Candidate;
+import com.atlas.votingsystem.exception.DuplicateResourceException;
 import com.atlas.votingsystem.exception.ResourceNotFoundException;
 import com.atlas.votingsystem.repository.CandidateRepository;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class CandidateService {
     }
 
     public CandidateResponse createCandidate(CandidateRequest request) {
+        validateUniquePartyName(request.getPartyName());
         Candidate candidate = new Candidate();
         copyRequestToCandidate(request, candidate);
         return toResponse(candidateRepository.save(candidate));
@@ -49,6 +51,7 @@ public class CandidateService {
     @Transactional
     public CandidateResponse updateCandidate(Long id, CandidateRequest request) {
         Candidate candidate = getCandidateEntityById(id);
+        validateUniquePartyName(request.getPartyName(), id);
         copyRequestToCandidate(request, candidate);
         return toResponse(candidate);
     }
@@ -73,6 +76,18 @@ public class CandidateService {
         candidate.setConstituency(request.getConstituency());
         candidate.setDateOfBirth(request.getDateOfBirth());
         candidate.setManifesto(request.getManifesto());
+    }
+
+    private void validateUniquePartyName(String partyName) {
+        if (candidateRepository.existsByPartyNameIgnoreCase(partyName)) {
+            throw new DuplicateResourceException("Party name already exists: " + partyName);
+        }
+    }
+
+    private void validateUniquePartyName(String partyName, Long candidateId) {
+        if (candidateRepository.existsByPartyNameIgnoreCaseAndIdNot(partyName, candidateId)) {
+            throw new DuplicateResourceException("Party name already exists: " + partyName);
+        }
     }
 
     private Candidate getCandidateEntityById(Long id) {

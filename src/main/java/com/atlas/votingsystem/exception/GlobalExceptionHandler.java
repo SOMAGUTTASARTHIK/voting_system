@@ -19,6 +19,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<Map<String, Object>> handleDuplicateResource(DuplicateResourceException exception) {
+        return buildErrorResponse(HttpStatus.CONFLICT, exception.getMessage());
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidCredentials(InvalidCredentialsException exception) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());
