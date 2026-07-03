@@ -60,9 +60,11 @@ public class CandidateService {
 
     @Transactional
     public CandidateResponse addVote(Long id) {
-        Candidate candidate = getCandidateEntityById(id);
-        candidate.setVoteCount(candidate.getVoteCount() + 1);
-        return toResponse(candidate);
+        int updatedRows = candidateRepository.incrementVoteCount(id);
+        if (updatedRows == 0) {
+            throw new ResourceNotFoundException("Candidate not found with id: " + id);
+        }
+        return getCandidateById(id);
     }
 
     private void copyRequestToCandidate(CandidateRequest request, Candidate candidate) {
