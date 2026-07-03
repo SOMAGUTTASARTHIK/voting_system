@@ -1,6 +1,7 @@
 package com.atlas.votingsystem.service;
 
 import com.atlas.votingsystem.dto.CandidateRequest;
+import com.atlas.votingsystem.dto.CandidateResponse;
 import com.atlas.votingsystem.entity.Candidate;
 import com.atlas.votingsystem.exception.ResourceNotFoundException;
 import com.atlas.votingsystem.repository.CandidateRepository;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CandidateService {
@@ -18,48 +20,81 @@ public class CandidateService {
         this.candidateRepository = candidateRepository;
     }
 
-    public List<Candidate> getAllCandidates() {
-        return candidateRepository.findAll();
+    public List<CandidateResponse> getAllCandidates() {
+        return toResponseList(candidateRepository.findAll());
     }
 
-    public List<Candidate> getCandidatesByConstituency(String constituency) {
-        return candidateRepository.findByConstituencyIgnoreCase(constituency);
+    public List<CandidateResponse> getCandidatesByConstituency(String constituency) {
+        return toResponseList(candidateRepository.findByConstituencyIgnoreCase(constituency));
     }
 
-    public Candidate getCandidateById(Long id) {
-        return candidateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with id: " + id));
+    public List<CandidateResponse> getResults() {
+        return toResponseList(candidateRepository.findAllByOrderByVoteCountDesc());
     }
 
-    public Candidate createCandidate(CandidateRequest request) {
+    public List<CandidateResponse> getResultsByConstituency(String constituency) {
+        return toResponseList(candidateRepository.findByConstituencyIgnoreCaseOrderByVoteCountDesc(constituency));
+    }
+
+    public CandidateResponse getCandidateById(Long id) {
+        return toResponse(getCandidateEntityById(id));
+    }
+
+    public CandidateResponse createCandidate(CandidateRequest request) {
         Candidate candidate = new Candidate();
         copyRequestToCandidate(request, candidate);
-        return candidateRepository.save(candidate);
+        return toResponse(candidateRepository.save(candidate));
     }
 
     @Transactional
-    public Candidate updateCandidate(Long id, CandidateRequest request) {
-        Candidate candidate = getCandidateById(id);
+    public CandidateResponse updateCandidate(Long id, CandidateRequest request) {
+        Candidate candidate = getCandidateEntityById(id);
         copyRequestToCandidate(request, candidate);
-        return candidate;
+        return toResponse(candidate);
     }
 
     public void deleteCandidate(Long id) {
-        Candidate candidate = getCandidateById(id);
+        Candidate candidate = getCandidateEntityById(id);
         candidateRepository.delete(candidate);
     }
 
     @Transactional
-    public Candidate addVote(Long id) {
-        Candidate candidate = getCandidateById(id);
+    public CandidateResponse addVote(Long id) {
+        Candidate candidate = getCandidateEntityById(id);
         candidate.setVoteCount(candidate.getVoteCount() + 1);
-        return candidate;
+        return toResponse(candidate);
     }
 
     private void copyRequestToCandidate(CandidateRequest request, Candidate candidate) {
         candidate.setName(request.getName());
         candidate.setPartyName(request.getPartyName());
         candidate.setConstituency(request.getConstituency());
+        candidate.setDateOfBirth(request.getDateOfBirth());
         candidate.setManifesto(request.getManifesto());
+    }
+
+    private Candidate getCandidateEntityById(Long id) {
+        return candidateRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Candidate not found with id: " + id));
+    }
+
+    private List<CandidateResponse> toResponseList(List<Candidate> candidates) {
+        return candidates.stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    private CandidateResponse toResponse(Candidate candidate) {
+        return new CandidateResponse(
+                candidate.getId(),
+                candidate.getName(),
+                candidate.getPartyName(),
+                candidate.getConstituency(),
+                candidate.getDateOfBirth(),
+                candidate.getAge(),
+                candidate.getManifesto(),
+                candidate.getVoteCount(),
+                candidate.getCreatedAt()
+        );
     }
 }

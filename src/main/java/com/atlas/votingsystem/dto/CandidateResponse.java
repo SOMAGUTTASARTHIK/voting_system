@@ -1,90 +1,68 @@
-package com.atlas.votingsystem.entity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
+package com.atlas.votingsystem.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Period;
 
-@Entity
-@Table(name = "candidates")
-public class Candidate {
+public class CandidateResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, length = 100)
     private String name;
-
-    @Column(nullable = false, length = 100)
     private String partyName;
-
-    @Column(nullable = false, length = 100)
     private String constituency;
-
-    @Column
     private LocalDate dateOfBirth;
-
-    @Column(length = 100)
+    private int age;
     private String manifesto;
-
-    @Column(nullable = false)
     private int voteCount;
-
-    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Candidate() {
+    public CandidateResponse() {
     }
 
-    public Candidate(String name, String partyName, String constituency, LocalDate dateOfBirth, String manifesto) {
+    public CandidateResponse(Long id, String name, String partyName, String constituency, LocalDate dateOfBirth,
+                             int age, String manifesto, int voteCount, LocalDateTime createdAt) {
+        this.id = id;
         this.name = name;
         this.partyName = partyName;
         this.constituency = constituency;
         this.dateOfBirth = dateOfBirth;
+        this.age = age;
         this.manifesto = manifesto;
-    }
-
-    @PrePersist
-    void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+        this.voteCount = voteCount;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
+
         return id;
     }
 
     public void setId(Long id) {
+
         this.id = id;
     }
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public String getPartyName() {
+
         return partyName;
     }
 
     public void setPartyName(String partyName) {
+
         this.partyName = partyName;
     }
 
     public String getConstituency() {
+
         return constituency;
     }
 
@@ -100,12 +78,12 @@ public class Candidate {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @Transient
     public int getAge() {
-        if (dateOfBirth == null) {
-            return 0;
-        }
-        return Period.between(dateOfBirth, LocalDate.now()).getYears();
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 
     public String getManifesto() {

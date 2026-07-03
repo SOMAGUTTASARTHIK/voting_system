@@ -1,7 +1,7 @@
 package com.atlas.votingsystem.controller;
 
 import com.atlas.votingsystem.dto.CandidateRequest;
-import com.atlas.votingsystem.entity.Candidate;
+import com.atlas.votingsystem.dto.CandidateResponse;
 import com.atlas.votingsystem.service.CandidateService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -29,31 +29,39 @@ public class CandidateController {
     }
 
     @GetMapping
-    public List<Candidate> getCandidates(@RequestParam(required = false) String constituency) {
+    public List<CandidateResponse> getCandidates(@RequestParam(required = false) String constituency) {
         if (constituency == null || constituency.isBlank()) {
             return candidateService.getAllCandidates();
         }
         return candidateService.getCandidatesByConstituency(constituency);
     }
 
+    @GetMapping("/results")
+    public List<CandidateResponse> getResults(@RequestParam(required = false) String constituency) {
+        if (constituency == null || constituency.isBlank()) {
+            return candidateService.getResults();
+        }
+        return candidateService.getResultsByConstituency(constituency);
+    }
+
     @GetMapping("/{id}")
-    public Candidate getCandidate(@PathVariable Long id) {
+    public CandidateResponse getCandidate(@PathVariable Long id) {
         return candidateService.getCandidateById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Candidate> createCandidate(@Valid @RequestBody CandidateRequest request) {
-        Candidate createdCandidate = candidateService.createCandidate(request);
+    public ResponseEntity<CandidateResponse> createCandidate(@Valid @RequestBody CandidateRequest request) {
+        CandidateResponse createdCandidate = candidateService.createCandidate(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCandidate);
     }
 
     @PutMapping("/{id}")
-    public Candidate updateCandidate(@PathVariable Long id, @Valid @RequestBody CandidateRequest request) {
+    public CandidateResponse updateCandidate(@PathVariable Long id, @Valid @RequestBody CandidateRequest request) {
         return candidateService.updateCandidate(id, request);
     }
 
     @PostMapping("/{id}/vote")
-    public Candidate voteForCandidate(@PathVariable Long id) {
+    public CandidateResponse voteForCandidate(@PathVariable Long id) {
         return candidateService.addVote(id);
     }
 

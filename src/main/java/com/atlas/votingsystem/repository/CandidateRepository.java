@@ -8,4 +8,8 @@ import java.util.List;
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     List<Candidate> findByConstituencyIgnoreCase(String constituency);
+
+    List<Candidate> findAllByOrderByVoteCountDesc();
+
+    List<Candidate> findByConstituencyIgnoreCaseOrderByVoteCountDesc(String constituency);
 }

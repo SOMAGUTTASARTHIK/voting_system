@@ -1,7 +1,11 @@
 package com.atlas.votingsystem.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
 
 public class CandidateRequest {
 
@@ -17,31 +21,51 @@ public class CandidateRequest {
     @Size(max = 100, message = "Constituency must be at most 100 characters")
     private String constituency;
 
+    @NotNull(message = "Date of birth is required")
+    @Past(message = "Date of birth must be in the past")
+    private LocalDate dateOfBirth;
+
     @Size(max = 1000, message = "Manifesto must be at most 1000 characters")
     private String manifesto;
 
     public String getName() {
+
         return name;
     }
 
     public void setName(String name) {
+
         this.name = name;
     }
 
     public String getPartyName() {
+
         return partyName;
     }
 
     public void setPartyName(String partyName) {
+
         this.partyName = partyName;
     }
 
     public String getConstituency() {
+
         return constituency;
     }
 
     public void setConstituency(String constituency) {
+
         this.constituency = constituency;
+    }
+
+    public LocalDate getDateOfBirth() {
+
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getManifesto() {
@@ -49,6 +73,7 @@ public class CandidateRequest {
     }
 
     public void setManifesto(String manifesto) {
+
         this.manifesto = manifesto;
     }
 }
