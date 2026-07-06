@@ -8,6 +8,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +18,9 @@ import java.time.Period;
 
 @Entity
 @Table(name = "candidates")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Candidate {
 
     @Id
@@ -42,9 +48,6 @@ public class Candidate {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public Candidate() {
-    }
-
     public Candidate(String name, String partyName, String constituency, LocalDate dateOfBirth, String manifesto) {
         this.name = name;
         this.partyName = partyName;
@@ -60,75 +63,11 @@ public class Candidate {
         }
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPartyName() {
-        return partyName;
-    }
-
-    public void setPartyName(String partyName) {
-        this.partyName = partyName;
-    }
-
-    public String getConstituency() {
-        return constituency;
-    }
-
-    public void setConstituency(String constituency) {
-        this.constituency = constituency;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
     @Transient
     public int getAge() {
         if (dateOfBirth == null) {
             return 0;
         }
         return Period.between(dateOfBirth, LocalDate.now()).getYears();
-    }
-
-    public String getManifesto() {
-        return manifesto;
-    }
-
-    public void setManifesto(String manifesto) {
-        this.manifesto = manifesto;
-    }
-
-    public int getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

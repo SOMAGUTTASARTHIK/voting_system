@@ -4,9 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Getter
+@Setter
 public class CandidateRequest {
 
     @NotBlank(message = "Candidate name is required")
@@ -27,53 +31,4 @@ public class CandidateRequest {
 
     @Size(max = 1000, message = "Manifesto must be at most 1000 characters")
     private String manifesto;
-
-    public String getName() {
-
-        return name;
-    }
-
-    public void setName(String name) {
-
-        this.name = name;
-    }
-
-    public String getPartyName() {
-
-        return partyName;
-    }
-
-    public void setPartyName(String partyName) {
-
-        this.partyName = partyName;
-    }
-
-    public String getConstituency() {
-
-        return constituency;
-    }
-
-    public void setConstituency(String constituency) {
-
-        this.constituency = constituency;
-    }
-
-    public LocalDate getDateOfBirth() {
-
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(LocalDate dateOfBirth) {
-
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getManifesto() {
-        return manifesto;
-    }
-
-    public void setManifesto(String manifesto) {
-
-        this.manifesto = manifesto;
-    }
 }
