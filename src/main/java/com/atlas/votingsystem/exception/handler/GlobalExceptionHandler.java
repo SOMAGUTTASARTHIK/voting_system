@@ -1,5 +1,6 @@
-package com.atlas.votingsystem.exception;
+package com.atlas.votingsystem.exception.handler;
 
+import com.atlas.votingsystem.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
