@@ -2,6 +2,7 @@ package com.atlas.votingsystem.controller;
 
 import com.atlas.votingsystem.dto.CandidateRequest;
 import com.atlas.votingsystem.dto.CandidateResponse;
+import com.atlas.votingsystem.dto.VoteRequest;
 import com.atlas.votingsystem.service.CandidateService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -61,8 +62,8 @@ public class CandidateController {
     }
 
     @PostMapping("/{id}/vote")
-    public CandidateResponse voteForCandidate(@PathVariable Long id) {
-        return candidateService.addVote(id);
+    public CandidateResponse voteForCandidate(@PathVariable Long id, @Valid @RequestBody VoteRequest request) {
+        return candidateService.addVote(id, request.getVoterId());
     }
 
     @DeleteMapping("/{id}")

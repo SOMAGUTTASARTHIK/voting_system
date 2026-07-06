@@ -2,6 +2,8 @@ package com.atlas.votingsystem.controller;
 
 import com.atlas.votingsystem.dto.LoginRequest;
 import com.atlas.votingsystem.dto.LoginResponse;
+import com.atlas.votingsystem.dto.VoterLoginRequest;
+import com.atlas.votingsystem.dto.VoterLoginResponse;
 import com.atlas.votingsystem.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,5 +24,10 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
+    }
+
+    @PostMapping("/voter/login")
+    public VoterLoginResponse voterLogin(@Valid @RequestBody VoterLoginRequest request) {
+        return authService.voterLogin(request);
     }
 }

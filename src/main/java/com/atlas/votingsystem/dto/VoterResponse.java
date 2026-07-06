@@ -23,4 +23,7 @@ public class VoterResponse {
     private int age;
     private String role;
     private LocalDateTime createdAt;
+    private boolean hasVoted;
+    private Long votedCandidateId;
+    private LocalDateTime votedAt;
 }

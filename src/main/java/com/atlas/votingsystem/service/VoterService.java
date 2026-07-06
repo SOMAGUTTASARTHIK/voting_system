@@ -128,7 +128,10 @@ public class VoterService {
                 voter.getPanNumber(),
                 voter.getAge(),
                 voter.getRole(),
-                voter.getCreatedAt()
+                voter.getCreatedAt(),
+                voter.isHasVoted(),
+                voter.getVotedCandidateId(),
+                voter.getVotedAt()
         );
     }
 }

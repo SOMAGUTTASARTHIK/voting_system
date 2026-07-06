@@ -3,12 +3,16 @@ package com.atlas.votingsystem.service;
 import com.atlas.votingsystem.dto.CandidateRequest;
 import com.atlas.votingsystem.dto.CandidateResponse;
 import com.atlas.votingsystem.entity.Candidate;
+import com.atlas.votingsystem.entity.Voter;
 import com.atlas.votingsystem.exception.DuplicateResourceException;
 import com.atlas.votingsystem.exception.ResourceNotFoundException;
+import com.atlas.votingsystem.exception.VoterAlreadyVotedException;
 import com.atlas.votingsystem.repository.CandidateRepository;
+import com.atlas.votingsystem.repository.VoterRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +20,11 @@ import java.util.stream.Collectors;
 public class CandidateService {
 
     private final CandidateRepository candidateRepository;
+    private final VoterRepository voterRepository;
 
-    public CandidateService(CandidateRepository candidateRepository) {
+    public CandidateService(CandidateRepository candidateRepository, VoterRepository voterRepository) {
         this.candidateRepository = candidateRepository;
+        this.voterRepository = voterRepository;
     }
 
     public List<CandidateResponse> getAllCandidates() {
@@ -62,12 +68,28 @@ public class CandidateService {
     }
 
     @Transactional
-    public CandidateResponse addVote(Long id) {
-        int updatedRows = candidateRepository.incrementVoteCount(id);
-        if (updatedRows == 0) {
-            throw new ResourceNotFoundException("Candidate not found with id: " + id);
+    public CandidateResponse addVote(Long candidateId, Long voterId) {
+        Voter voter = voterRepository.findById(voterId)
+                .orElseThrow(() -> new ResourceNotFoundException("Voter not found with id: " + voterId));
+
+        if (voter.isHasVoted()) {
+            throw new VoterAlreadyVotedException(
+                    "Voter with id " + voterId + " has already cast their vote and cannot vote again");
         }
-        return getCandidateById(id);
+
+        // Increment the vote count for the candidate (and therefore their party)
+        // the voter is casting their vote for.
+        int updatedRows = candidateRepository.incrementVoteCount(candidateId);
+        if (updatedRows == 0) {
+            throw new ResourceNotFoundException("Candidate not found with id: " + candidateId);
+        }
+
+        voter.setHasVoted(true);
+        voter.setVotedCandidateId(candidateId);
+        voter.setVotedAt(LocalDateTime.now());
+        voterRepository.save(voter);
+
+        return getCandidateById(candidateId);
     }
 
     private void copyRequestToCandidate(CandidateRequest request, Candidate candidate) {

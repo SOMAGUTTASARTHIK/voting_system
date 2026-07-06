@@ -29,6 +29,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 
+    @ExceptionHandler(VoterAlreadyVotedException.class)
+    public ResponseEntity<Map<String, Object>> handleVoterAlreadyVoted(VoterAlreadyVotedException exception) {
+        return buildErrorResponse(HttpStatus.CONFLICT, exception.getMessage());
+    }
+
     @ExceptionHandler(InvalidCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleInvalidCredentials(InvalidCredentialsException exception) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage());

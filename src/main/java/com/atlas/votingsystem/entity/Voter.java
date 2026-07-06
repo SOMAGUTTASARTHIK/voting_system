@@ -48,6 +48,15 @@ public class Voter {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private boolean hasVoted;
+
+    @Column
+    private Long votedCandidateId;
+
+    @Column
+    private LocalDateTime votedAt;
+
     @PrePersist
     void prePersist() {
         if (createdAt == null) {
