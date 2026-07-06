@@ -20,7 +20,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     boolean existsByPartyNameIgnoreCaseAndIdNot(String partyName, Long id);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("update Candidate c set c.voteCount = c.voteCount + 1 where c.id = :id")
     int incrementVoteCount(@Param("id") Long id);
 }

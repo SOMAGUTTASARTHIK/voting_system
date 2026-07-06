@@ -73,12 +73,9 @@ public class CandidateService {
                 .orElseThrow(() -> new ResourceNotFoundException("Voter not found with id: " + voterId));
 
         if (voter.isHasVoted()) {
-            throw new VoterAlreadyVotedException(
-                    "Voter with id " + voterId + " has already cast their vote and cannot vote again");
+            throw new VoterAlreadyVotedException("Voter with id " + voterId + " has already cast their vote...");
         }
 
-        // Increment the vote count for the candidate (and therefore their party)
-        // the voter is casting their vote for.
         int updatedRows = candidateRepository.incrementVoteCount(candidateId);
         if (updatedRows == 0) {
             throw new ResourceNotFoundException("Candidate not found with id: " + candidateId);
