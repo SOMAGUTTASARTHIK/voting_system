@@ -18,7 +18,7 @@ public class VoterResponse {
     private String name;
     private LocalDate dateOfBirth;
     private String phoneNumber;
-    private String aadharNo;
+    private String aadhaarNo;
     private String panNumber;
     private int age;
     private String role;

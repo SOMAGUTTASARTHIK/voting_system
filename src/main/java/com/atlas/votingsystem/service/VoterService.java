@@ -61,7 +61,7 @@ public class VoterService {
         voter.setName(request.getName());
         voter.setDateOfBirth(request.getDateOfBirth());
         voter.setPhoneNumber(request.getPhoneNumber());
-        voter.setAadharNo(request.getAadharNo());
+        voter.setAadharNo(request.getAadhaarNo());
         voter.setPanNumber(request.getPanNumber());
         voter.setRole(request.getRole());
     }
@@ -87,8 +87,8 @@ public class VoterService {
         if (voterRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new DuplicateResourceException("Phone number already exists: " + request.getPhoneNumber());
         }
-        if (voterRepository.existsByAadharNo(request.getAadharNo())) {
-            throw new DuplicateResourceException("Aadhar number already exists: " + request.getAadharNo());
+        if (voterRepository.existsByAadharNo(request.getAadhaarNo())) {
+            throw new DuplicateResourceException("Aadhar number already exists: " + request.getAadhaarNo());
         }
         if (voterRepository.existsByPanNumberIgnoreCase(request.getPanNumber())) {
             throw new DuplicateResourceException("PAN number already exists: " + request.getPanNumber());
@@ -99,8 +99,8 @@ public class VoterService {
         if (voterRepository.existsByPhoneNumberAndIdNot(request.getPhoneNumber(), voterId)) {
             throw new DuplicateResourceException("Phone number already exists: " + request.getPhoneNumber());
         }
-        if (voterRepository.existsByAadharNoAndIdNot(request.getAadharNo(), voterId)) {
-            throw new DuplicateResourceException("Aadhar number already exists: " + request.getAadharNo());
+        if (voterRepository.existsByAadharNoAndIdNot(request.getAadhaarNo(), voterId)) {
+            throw new DuplicateResourceException("Aadhar number already exists: " + request.getAadhaarNo());
         }
         if (voterRepository.existsByPanNumberIgnoreCaseAndIdNot(request.getPanNumber(), voterId)) {
             throw new DuplicateResourceException("PAN number already exists: " + request.getPanNumber());
