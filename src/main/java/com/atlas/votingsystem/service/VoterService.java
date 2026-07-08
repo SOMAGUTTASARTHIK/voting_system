@@ -61,7 +61,7 @@ public class VoterService {
         voter.setName(request.getName());
         voter.setDateOfBirth(request.getDateOfBirth());
         voter.setPhoneNumber(request.getPhoneNumber());
-        voter.setAadharNo(request.getAadhaarNo());
+        voter.setAadhaarNo(request.getAadhaarNo());
         voter.setPanNumber(request.getPanNumber());
         voter.setRole(request.getRole());
     }
@@ -124,7 +124,7 @@ public class VoterService {
                 voter.getName(),
                 voter.getDateOfBirth(),
                 voter.getPhoneNumber(),
-                voter.getAadharNo(),
+                voter.getAadhaarNo(),
                 voter.getPanNumber(),
                 voter.getAge(),
                 voter.getRole(),
