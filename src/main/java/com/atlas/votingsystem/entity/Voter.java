@@ -37,7 +37,7 @@ public class Voter {
     private String phoneNumber;
 
     @Column(nullable = false, unique = true, length = 12)
-    private String AadhaarNo;
+    private String aadharNo;
 
     @Column(nullable = false, unique = true, length = 10)
     private String panNumber;
